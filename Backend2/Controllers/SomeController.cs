@@ -30,24 +30,38 @@ namespace Backend2.Controllers
 
         [HttpGet("async")]
         public async Task<IActionResult> GetAsync() {
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            stopwatch.Start();
+
             var task1 = new Task<int>(() => {
                 Thread.Sleep(1000);
                 Console.WriteLine("Connection to database is finished");
                 return 8;
             });
 
+            var task2 = new Task<int>(() => {
+                Thread.Sleep(1000);
+                Console.WriteLine("Email sended");
+                return 8;
+            });
+
             // la tarea inicia en segundo plano (como un subproceso)
             task1.Start();
+            task2.Start();
 
 
             Console.WriteLine("Hago otra cosa");
 
             // nos detenemos aquí a esperar que termine task1
             var result = await task1;
+            var result2 = await task2;
 
             Console.WriteLine("Finished");
 
-            return Ok(result);
+            stopwatch.Stop();
+
+            return Ok(result + " - " + result2 + " - " + stopwatch.Elapsed);
 
         }
 
