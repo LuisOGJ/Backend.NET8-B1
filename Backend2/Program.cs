@@ -23,7 +23,7 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 builder.Services.AddScoped<IPostsService, PostsService>();
 
 builder.Services.AddHttpClient<IPostsService, PostsService>( c => {
-    c.BaseAddress = new Uri("https://jsonplaceholder.typicode.com/posts");
+    c.BaseAddress = new Uri(builder.Configuration["baseUrlPosts"]);
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
