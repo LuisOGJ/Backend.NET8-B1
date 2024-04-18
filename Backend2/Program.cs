@@ -23,6 +23,7 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 builder.Services.AddScoped<IPostsService, PostsService>();
 
 builder.Services.AddHttpClient<IPostsService, PostsService>( c => {
+    // con bluilder.Configuration accedemos a la varibles de appsettings.json
     c.BaseAddress = new Uri(builder.Configuration["baseUrlPosts"]);
 });
 
