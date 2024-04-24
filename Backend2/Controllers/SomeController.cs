@@ -41,7 +41,7 @@ namespace Backend2.Controllers
             });
 
             var task2 = new Task<int>(() => {
-                Thread.Sleep(1000);
+                Thread.Sleep(2000);
                 Console.WriteLine("Email sended");
                 return 8;
             });
@@ -54,8 +54,9 @@ namespace Backend2.Controllers
             Console.WriteLine("Hago otra cosa");
 
             // nos detenemos aquí a esperar que termine task1
-            var result = await task1;
             var result2 = await task2;
+            var result = await task1;
+            
 
             Console.WriteLine("Finished");
 
