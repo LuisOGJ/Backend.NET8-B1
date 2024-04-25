@@ -1,4 +1,6 @@
+using Backend2.Models;
 using Backend2.Services;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,9 +24,16 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 
 builder.Services.AddScoped<IPostsService, PostsService>();
 
+
+// Inyección de HttpClient servicio a jsonplaceholder
 builder.Services.AddHttpClient<IPostsService, PostsService>( c => {
     // con bluilder.Configuration accedemos a la varibles de appsettings.json
     c.BaseAddress = new Uri(builder.Configuration["baseUrlPosts"]);
+});
+
+// Configuración de EntityFramework
+builder.Services.AddDbContext<StoreContext>(options => {
+    options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection"));
 });
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
