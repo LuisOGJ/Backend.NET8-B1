@@ -54,7 +54,7 @@ namespace Backend2.Controllers
                 BrandID = beer.BrandID,
             };
 
-            // response and status code
+            // response and status codeñ
             return Ok(beerDto);
         }
 
@@ -89,6 +89,31 @@ namespace Backend2.Controllers
             // nameof(GetByID) return path for get the object
             // new { id = beer.BeerID } return id of the beer created
             return CreatedAtAction(nameof(GetById), new { id = beer.BeerID}, beerDto);
+        }
+
+
+        [HttpPut("{id}")]
+        public async Task<ActionResult<BeerDto>> Update(int id, BeerUpdateDto beerUpdateDto) {
+            var beer = await _context.Beer.FindAsync(id);
+            if (beer == null) {
+                return NotFound();
+            }
+
+            beer.Name = beerUpdateDto.Name;
+            beer.Alcohol = beerUpdateDto.Alcohol;
+            beer.BrandID = beerUpdateDto.BrandID;
+            await _context.SaveChangesAsync();
+
+            var beerDto = new BeerDto()
+            {
+                Id = beer.BeerID,
+                Name = beer.Name,
+                BrandID = beer.BrandID,
+                Alcohol = beer.Alcohol,
+            };
+
+            return Ok(beerDto);
+
         }
 
     }
