@@ -116,5 +116,20 @@ namespace Backend2.Controllers
 
         }
 
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id) {
+            var beer = await _context.Beer.FindAsync(id);
+            if (beer == null)
+            {
+                return NotFound();
+            }
+
+            _context.Beer.Remove(beer);
+            await _context.SaveChangesAsync();
+
+            return Ok();
+
+        }
+
     }
 }
