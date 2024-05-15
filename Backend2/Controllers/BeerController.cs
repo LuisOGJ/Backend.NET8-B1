@@ -1,5 +1,6 @@
 ﻿using Backend2.DTOs;
 using Backend2.Models;
+using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,15 +11,17 @@ namespace Backend2.Controllers
     [ApiController]
     public class BeerController : ControllerBase
     {
-        public StoreContext _context;
+        private StoreContext _context;
+        private IValidator<BeerInsertDto> _beerInsertValidator;
 
         // CONSTRUCTOR
         /*
          StoreContext have methods for interact whith DB
          */
-        public BeerController(StoreContext context)
+        public BeerController(StoreContext context, IValidator<BeerInsertDto> beerInsertValidator)
         {
             _context = context;
+            _beerInsertValidator = beerInsertValidator;
         }
 
 
@@ -63,6 +66,12 @@ namespace Backend2.Controllers
         // CREATE BEER
         [HttpPost]
         public async Task<ActionResult<BeerDto>> Add(BeerInsertDto beerInsertDto) {
+
+            var validationResult = await _beerInsertValidator.ValidateAsync(beerInsertDto);
+
+            if (!validationResult.IsValid) { 
+                return BadRequest(validationResult.Errors);
+            }
 
             // SAVE IN A OBJECT BEER
             var beer = new Beer()

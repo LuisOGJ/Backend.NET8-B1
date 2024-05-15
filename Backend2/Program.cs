@@ -1,5 +1,8 @@
+using Backend2.DTOs;
 using Backend2.Models;
 using Backend2.Services;
+using Backend2.Validators;
+using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -35,6 +38,10 @@ builder.Services.AddHttpClient<IPostsService, PostsService>( c => {
 builder.Services.AddDbContext<StoreContext>(options => {
     options.UseSqlServer(builder.Configuration.GetConnectionString("StoreConnection"));
 });
+
+
+// Validadores
+builder.Services.AddScoped<IValidator<BeerInsertDto>, BeerInsertValidator>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
