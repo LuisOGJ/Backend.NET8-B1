@@ -13,15 +13,17 @@ namespace Backend2.Controllers
     {
         private StoreContext _context;
         private IValidator<BeerInsertDto> _beerInsertValidator;
+        private IValidator<BeerUpdateDto> _beerUpdateValidator;
 
         // CONSTRUCTOR
         /*
          StoreContext have methods for interact whith DB
          */
-        public BeerController(StoreContext context, IValidator<BeerInsertDto> beerInsertValidator)
+        public BeerController(StoreContext context, IValidator<BeerInsertDto> beerInsertValidator, IValidator<BeerUpdateDto> beerUpdateValidator)
         {
             _context = context;
             _beerInsertValidator = beerInsertValidator;
+            _beerUpdateValidator = beerUpdateValidator;
         }
 
 
@@ -103,7 +105,15 @@ namespace Backend2.Controllers
 
         [HttpPut("{id}")]
         public async Task<ActionResult<BeerDto>> Update(int id, BeerUpdateDto beerUpdateDto) {
+            
+            var validatioResult = await _beerUpdateValidator.ValidateAsync(beerUpdateDto);
+
+            if (!validatioResult.IsValid) {
+                return BadRequest(validatioResult.Errors);
+            }
+
             var beer = await _context.Beer.FindAsync(id);
+
             if (beer == null) {
                 return NotFound();
             }
