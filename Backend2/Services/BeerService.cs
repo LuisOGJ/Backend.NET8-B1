@@ -1,32 +1,59 @@
 ﻿using Backend2.DTOs;
+using Backend2.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace Backend2.Services
 {
     public class BeerService : IBeerService
     {
-        Task<BeerDto> IBeerService.Add(BeerInsertDto beerInsertDto)
+
+        private StoreContext _context;
+
+        public BeerService(StoreContext storeContext)
+        {
+            _context = storeContext;
+        }
+
+        public Task<BeerDto> Add(BeerInsertDto beerInsertDto)
         {
             throw new NotImplementedException();
         }
 
-        Task<BeerDto> IBeerService.Delete(int id)
+        public Task<BeerDto> Delete(int id)
         {
             throw new NotImplementedException();
         }
 
-        Task<IEnumerable<BeerDto>> IBeerService.Get()
+        public async Task<IEnumerable<BeerDto>> Get() => await _context.Beer.Select(b => new BeerDto
+        {
+            Id = b.BeerID,
+            Name = b.Name,
+            Alcohol = b.Alcohol,
+            BrandID = b.BrandID,
+        }).ToListAsync();
+
+
+        public Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto)
         {
             throw new NotImplementedException();
         }
 
-        Task<BeerDto> IBeerService.Get(int id)
+        public async Task<BeerDto> GetById(int id)
         {
-            throw new NotImplementedException();
+            var beer = await _context.Beer.FindAsync(id);
+            if (beer != null)
+            {
+                var beerDto = new BeerDto
+                {
+                    Id = beer.BeerID,
+                    Name = beer.Name,
+                    Alcohol = beer.Alcohol,
+                    BrandID = beer.BrandID,
+                };
+                return beerDto;
+            }
+            return null;
         }
 
-        Task<BeerDto> IBeerService.Update(int id, BeerUpdateDto beerUpdateDto)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using Backend2.DTOs;
 using Backend2.Models;
+using Backend2.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,53 +15,37 @@ namespace Backend2.Controllers
         private StoreContext _context;
         private IValidator<BeerInsertDto> _beerInsertValidator;
         private IValidator<BeerUpdateDto> _beerUpdateValidator;
+        private IBeerService _beerService;
+
 
         // CONSTRUCTOR
         /*
          StoreContext have methods for interact whith DB
          */
-        public BeerController(StoreContext context, IValidator<BeerInsertDto> beerInsertValidator, IValidator<BeerUpdateDto> beerUpdateValidator)
+        public BeerController(
+            StoreContext context, 
+            IValidator<BeerInsertDto> beerInsertValidator, 
+            IValidator<BeerUpdateDto> beerUpdateValidator,
+            IBeerService beerService
+            )
         {
             _context = context;
             _beerInsertValidator = beerInsertValidator;
             _beerUpdateValidator = beerUpdateValidator;
+            _beerService = beerService;
         }
 
 
         // GET ALL BEER
         [HttpGet]
-        public async Task<IEnumerable<BeerDto>> Get() => await _context.Beer.Select(b => new BeerDto
-        {
-            Id = b.BeerID,
-            Name = b.Name,
-            Alcohol = b.Alcohol,
-            BrandID = b.BrandID,
-        }).ToListAsync();
+        public async Task<IEnumerable<BeerDto>> Get() => await _beerService.Get();
 
 
         // GET BY ATTRIBUTE
         [HttpGet("{id}")]
         public async Task<ActionResult<BeerDto>> GetById(int id) {
-
-            // Get response, cant be the object or null
-            var beer = await _context.Beer.FindAsync(id);
-
-            // validate
-            if (beer == null) {
-                return NotFound();
-            }
-
-            // Preparate Dto Object
-            var beerDto = new BeerDto
-            {
-                Id = beer.BeerID,
-                Name = beer.Name,
-                Alcohol = beer.Alcohol,
-                BrandID = beer.BrandID,
-            };
-
-            // response and status codeñ
-            return Ok(beerDto);
+            var beetDto = await _beerService.GetById(id);
+            return beetDto == null ? NotFound() : Ok(beetDto);
         }
 
 
