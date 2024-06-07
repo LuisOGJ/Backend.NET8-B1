@@ -12,10 +12,9 @@ namespace Backend2.Controllers
     [ApiController]
     public class BeerController : ControllerBase
     {
-        private StoreContext _context;
         private IValidator<BeerInsertDto> _beerInsertValidator;
         private IValidator<BeerUpdateDto> _beerUpdateValidator;
-        private IBeerService _beerService;
+        private ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> _beerService;
 
 
         // CONSTRUCTOR
@@ -23,13 +22,11 @@ namespace Backend2.Controllers
          StoreContext have methods for interact whith DB
          */
         public BeerController(
-            StoreContext context, 
             IValidator<BeerInsertDto> beerInsertValidator, 
             IValidator<BeerUpdateDto> beerUpdateValidator,
-            IBeerService beerService
+            [FromKeyedServices("beerService")] ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto> beerService
             )
         {
-            _context = context;
             _beerInsertValidator = beerInsertValidator;
             _beerUpdateValidator = beerUpdateValidator;
             _beerService = beerService;
