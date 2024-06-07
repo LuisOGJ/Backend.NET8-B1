@@ -8,9 +8,7 @@ namespace Backend2.Services
         Task<IEnumerable<BeerDto>> Get();
         Task<BeerDto> Get(int id);
         Task<BeerDto> Add(BeerInsertDto beerInsertDto);
-
         Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto);
-
         Task<BeerDto> Delete(int id);
 
     }
