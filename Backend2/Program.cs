@@ -1,5 +1,6 @@
 using Backend2.DTOs;
 using Backend2.Models;
+using Backend2.Repository;
 using Backend2.Services;
 using Backend2.Validators;
 using FluentValidation;
@@ -28,6 +29,7 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 builder.Services.AddScoped<IPostsService, PostsService>();
 
 builder.Services.AddKeyedScoped<ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto>, BeerService>("beerService");
+builder.Services.AddScoped<IRepository<Beer>, BeerRepository>();
 
 
 // Inyección de HttpClient servicio a jsonplaceholder
