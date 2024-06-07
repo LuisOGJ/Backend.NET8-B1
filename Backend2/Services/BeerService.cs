@@ -14,14 +14,53 @@ namespace Backend2.Services
             _context = storeContext;
         }
 
-        public Task<BeerDto> Add(BeerInsertDto beerInsertDto)
+        public async Task<BeerDto> Add(BeerInsertDto beerInsertDto)
         {
-            throw new NotImplementedException();
+            // SAVE IN A OBJECT BEER
+            var beer = new Beer()
+            {
+                Name = beerInsertDto.Name,
+                BrandID = beerInsertDto.BrandID,
+                Alcohol = beerInsertDto.Alcohol
+            };
+
+            // ADDING TO DB
+            await _context.Beer.AddAsync(beer); // agrega los datos faltantes a beer y se puede usar lineas abajo
+            await _context.SaveChangesAsync(); // para que se representen los datos en la db
+
+            // USING DTO FOR RETURN DATA
+            var beerDto = new BeerDto()
+            {
+                Id = beer.BeerID,
+                Name = beer.Name,
+                BrandID = beer.BrandID,
+                Alcohol = beer.Alcohol,
+            };
+
+            return beerDto;
         }
 
-        public Task<BeerDto> Delete(int id)
+        public async Task<BeerDto> Delete(int id)
         {
-            throw new NotImplementedException();
+            var beer = await _context.Beer.FindAsync(id);
+
+            if (beer == null) {
+                return null;
+            }
+
+            var beerDto = new BeerDto()
+            {
+                Id = beer.BeerID,
+                Name = beer.Name,
+                BrandID = beer.BrandID,
+                Alcohol = beer.Alcohol,
+            };
+
+            _context.Beer.Remove(beer);
+            await _context.SaveChangesAsync();
+
+            return beerDto;
+
         }
 
         public async Task<IEnumerable<BeerDto>> Get() => await _context.Beer.Select(b => new BeerDto
@@ -33,9 +72,30 @@ namespace Backend2.Services
         }).ToListAsync();
 
 
-        public Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto)
+        public async Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto)
         {
-            throw new NotImplementedException();
+            var beer = await _context.Beer.FindAsync(id);
+
+            if (beer == null)
+            {
+                return null;
+            }
+
+            beer.Name = beerUpdateDto.Name;
+            beer.Alcohol = beerUpdateDto.Alcohol;
+            beer.BrandID = beerUpdateDto.BrandID;
+            await _context.SaveChangesAsync();
+
+            var beerDto = new BeerDto()
+            {
+                Id = beer.BeerID,
+                Name = beer.Name,
+                BrandID = beer.BrandID,
+                Alcohol = beer.Alcohol,
+            };
+
+            return beerDto;
+
         }
 
         public async Task<BeerDto> GetById(int id)
