@@ -1,5 +1,6 @@
 using Backend2.Automappers;
 using Backend2.DTOs;
+using Backend2.DTOs.BrandDTOs;
 using Backend2.Models;
 using Backend2.Repository;
 using Backend2.Services;
@@ -30,6 +31,7 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 builder.Services.AddScoped<IPostsService, PostsService>();
 
 builder.Services.AddKeyedScoped<ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto>, BeerService>("beerService");
+builder.Services.AddKeyedScoped<ICommonService<BrandDTO, BrandInsertDTOs, BrandUpdateDto>, BrandService>("brandService");
 
 // Implemented Repositories
 builder.Services.AddScoped<IRepository<Beer>, BeerRepository>();

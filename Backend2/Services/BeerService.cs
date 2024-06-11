@@ -41,13 +41,7 @@ namespace Backend2.Services
                 return null;
             }
 
-            var beerDto = new BeerDto()
-            {
-                Id = beer.BeerID,
-                Name = beer.Name,
-                BrandID = beer.BrandID,
-                Alcohol = beer.Alcohol,
-            };
+            var beerDto = _mapper.Map<BeerDto>(beer);
 
             _beerRepository.Delete(beer);
             await _beerRepository.Save();
