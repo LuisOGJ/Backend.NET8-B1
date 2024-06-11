@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Backend2.DTOs;
+using Backend2.DTOs.BrandDTOs;
 using Backend2.Models;
 
 namespace Backend2.Automappers
@@ -11,6 +12,10 @@ namespace Backend2.Automappers
             CreateMap<BeerInsertDto, Beer>();
 
             CreateMap<Beer, BeerDto>().ForMember(dto => dto.Id, m => m.MapFrom(b => b.BeerID));
+
+
+            CreateMap<BrandInsertDTOs, Brand>();
+            CreateMap<Brand, BrandDTO>().ForMember(dto => dto.Id, m => m.MapFrom(b => b.BrandID));
         }
 
     }
