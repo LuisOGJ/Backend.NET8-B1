@@ -28,13 +28,7 @@ namespace Backend2.Services
             await _beerRepository.Save(); // para que se representen los datos en la db
 
             // USING DTO FOR RETURN DATA
-            var beerDto = new BeerDto()
-            {
-                Id = beer.BeerID,
-                Name = beer.Name,
-                BrandID = beer.BrandID,
-                Alcohol = beer.Alcohol,
-            };
+            var beerDto = _mapper.Map<BeerDto>(beer);
 
             return beerDto;
         }
@@ -64,12 +58,7 @@ namespace Backend2.Services
 
         public async Task<IEnumerable<BeerDto>> Get() {
             var beers = await _beerRepository.Get();
-            return beers.Select(beer => new BeerDto() { 
-                Id = beer.BeerID, 
-                Name = beer.Name, 
-                BrandID = beer.BrandID,
-                Alcohol= beer.Alcohol,
-            });
+            return beers.Select(beer => _mapper.Map<BeerDto>(beer));
 
         }
 
@@ -90,13 +79,7 @@ namespace Backend2.Services
             _beerRepository.Update(beer);
             await _beerRepository.Save();
 
-            var beerDto = new BeerDto()
-            {
-                Id = beer.BeerID,
-                Name = beer.Name,
-                BrandID = beer.BrandID,
-                Alcohol = beer.Alcohol,
-            };
+            var beerDto = _mapper.Map<BeerDto>(beer);
 
             return beerDto;
 
@@ -107,13 +90,7 @@ namespace Backend2.Services
             var beer = await _beerRepository.GetById(id);
             if (beer != null)
             {
-                var beerDto = new BeerDto
-                {
-                    Id = beer.BeerID,
-                    Name = beer.Name,
-                    Alcohol = beer.Alcohol,
-                    BrandID = beer.BrandID,
-                };
+                var beerDto = _mapper.Map<BeerDto>(beer);
                 return beerDto;
             }
             return null;
