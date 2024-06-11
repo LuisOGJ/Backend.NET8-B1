@@ -8,12 +8,10 @@ namespace Backend2.Services
     public class BeerService : ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto>
     {
 
-        private StoreContext _context;
         private IRepository<Beer> _beerRepository;
 
-        public BeerService(StoreContext storeContext, IRepository<Beer> beerRepository)
+        public BeerService(IRepository<Beer> beerRepository)
         {
-            _context = storeContext;
             _beerRepository = beerRepository;
         }
 
