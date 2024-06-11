@@ -1,3 +1,4 @@
+using Backend2.Automappers;
 using Backend2.DTOs;
 using Backend2.Models;
 using Backend2.Repository;
@@ -47,6 +48,11 @@ builder.Services.AddDbContext<StoreContext>(options => {
 // Validadores
 builder.Services.AddScoped<IValidator<BeerInsertDto>, BeerInsertValidator>();
 builder.Services.AddScoped<IValidator<BeerUpdateDto>, BeerUpdateValidator>();
+
+
+// Mappers
+builder.Services.AddAutoMapper(typeof(MappingProfile));
+
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
