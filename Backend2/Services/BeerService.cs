@@ -27,9 +27,9 @@ namespace Backend2.Services
                 Alcohol = beerInsertDto.Alcohol
             };
 
-            // ADDING TO DB
-            await _context.Beer.AddAsync(beer); // agrega los datos faltantes a beer y se puede usar lineas abajo
-            await _context.SaveChangesAsync(); // para que se representen los datos en la db
+            // ADDING TO DB with repository
+            await _beerRepository.Add(beer); // agrega los datos faltantes a beer y se puede usar lineas abajo
+            await _beerRepository.Save(); // para que se representen los datos en la db
 
             // USING DTO FOR RETURN DATA
             var beerDto = new BeerDto()
@@ -45,7 +45,7 @@ namespace Backend2.Services
 
         public async Task<BeerDto> Delete(int id)
         {
-            var beer = await _context.Beer.FindAsync(id);
+            var beer = await _beerRepository.GetById(id);
 
             if (beer == null) {
                 return null;
@@ -59,8 +59,8 @@ namespace Backend2.Services
                 Alcohol = beer.Alcohol,
             };
 
-            _context.Beer.Remove(beer);
-            await _context.SaveChangesAsync();
+            _beerRepository.Delete(beer);
+            await _beerRepository.Save();
 
             return beerDto;
 
@@ -80,7 +80,7 @@ namespace Backend2.Services
 
         public async Task<BeerDto> Update(int id, BeerUpdateDto beerUpdateDto)
         {
-            var beer = await _context.Beer.FindAsync(id);
+            var beer = await _beerRepository.GetById(id);
 
             if (beer == null)
             {
@@ -90,7 +90,9 @@ namespace Backend2.Services
             beer.Name = beerUpdateDto.Name;
             beer.Alcohol = beerUpdateDto.Alcohol;
             beer.BrandID = beerUpdateDto.BrandID;
-            await _context.SaveChangesAsync();
+
+            _beerRepository.Update(beer);
+            await _beerRepository.Save();
 
             var beerDto = new BeerDto()
             {

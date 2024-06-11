@@ -13,28 +13,19 @@ namespace Backend2.Repository
             _context = context;
         }
 
-        public Task Add(Beer entity)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task Add(Beer beer) => await _context.Beer.AddAsync(beer);
 
-        public void Delete(Beer entity)
-        {
-            throw new NotImplementedException();
-        }
+        public void Delete(Beer beer) => _context.Beer.Remove(beer);
 
         public async Task<IEnumerable<Beer>> Get() => await _context.Beer.ToListAsync();
 
         public async Task<Beer> GetById(int id) => await _context.Beer.FindAsync(id);
 
-        public Task Save()
-        {
-            throw new NotImplementedException();
-        }
+        public async Task Save() => await _context.SaveChangesAsync();
 
-        public void Update(Beer entity)
-        {
-            throw new NotImplementedException();
+        public void Update(Beer beer) {
+            _context.Beer.Attach(beer);
+            _context.Beer.Entry(beer).State = EntityState.Modified;
         }
     }
 }
