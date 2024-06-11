@@ -30,7 +30,10 @@ builder.Services.AddKeyedTransient<IRandomService, RandomService>("randomTransie
 builder.Services.AddScoped<IPostsService, PostsService>();
 
 builder.Services.AddKeyedScoped<ICommonService<BeerDto, BeerInsertDto, BeerUpdateDto>, BeerService>("beerService");
+
+// Implemented Repositories
 builder.Services.AddScoped<IRepository<Beer>, BeerRepository>();
+builder.Services.AddScoped<IRepository<Brand>, BrandRepository>();
 
 
 // Inyección de HttpClient servicio a jsonplaceholder
