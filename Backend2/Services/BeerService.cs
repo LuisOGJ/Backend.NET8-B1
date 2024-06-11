@@ -1,4 +1,5 @@
-﻿using Backend2.DTOs;
+﻿using AutoMapper;
+using Backend2.DTOs;
 using Backend2.Models;
 using Backend2.Repository;
 using Microsoft.EntityFrameworkCore;
@@ -9,21 +10,18 @@ namespace Backend2.Services
     {
 
         private IRepository<Beer> _beerRepository;
+        private IMapper _mapper; // utiliza el maper inyectado
 
-        public BeerService(IRepository<Beer> beerRepository)
+        public BeerService(IRepository<Beer> beerRepository, IMapper mapper)
         {
             _beerRepository = beerRepository;
+            _mapper = mapper;
         }
 
         public async Task<BeerDto> Add(BeerInsertDto beerInsertDto)
         {
             // SAVE IN A OBJECT BEER
-            var beer = new Beer()
-            {
-                Name = beerInsertDto.Name,
-                BrandID = beerInsertDto.BrandID,
-                Alcohol = beerInsertDto.Alcohol
-            };
+            var beer = _mapper.Map<Beer>(beerInsertDto);
 
             // ADDING TO DB with repository
             await _beerRepository.Add(beer); // agrega los datos faltantes a beer y se puede usar lineas abajo
