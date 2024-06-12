@@ -54,6 +54,9 @@ builder.Services.AddDbContext<StoreContext>(options => {
 builder.Services.AddScoped<IValidator<BeerInsertDto>, BeerInsertValidator>();
 builder.Services.AddScoped<IValidator<BeerUpdateDto>, BeerUpdateValidator>();
 
+builder.Services.AddScoped<IValidator<BrandInsertDTOs>, BrandInserValidator>();
+builder.Services.AddScoped<IValidator<BrandUpdateDto>, BrandUpdateValidator>();
+
 
 // Mappers
 builder.Services.AddAutoMapper(typeof(MappingProfile));
