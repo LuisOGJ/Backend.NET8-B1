@@ -11,6 +11,8 @@ namespace Backend2.Services
         private IRepository<Brand> _brandRepository;
         private IMapper _mapper;
 
+        public List<string> Errors { get; }
+
         public BrandService(IRepository<Brand> brandRepository, IMapper mapper) { 
             _brandRepository = brandRepository;
             _mapper = mapper;
@@ -82,5 +84,14 @@ namespace Backend2.Services
             return brandDto;
 
         }
+
+        public bool Validate(BrandInsertDTOs brandInsertDTOs) {
+            return true;
+        }
+
+        public bool Validate(BrandUpdateDto brandUpdateDto) {
+            return false;
+        }
+
     }
 }

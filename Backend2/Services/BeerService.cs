@@ -12,6 +12,8 @@ namespace Backend2.Services
         private IRepository<Beer> _beerRepository;
         private IMapper _mapper; // utiliza el maper inyectado
 
+        public List<string> Errors { get; }
+
         public BeerService(IRepository<Beer> beerRepository, IMapper mapper)
         {
             _beerRepository = beerRepository;
@@ -66,9 +68,8 @@ namespace Backend2.Services
                 return null;
             }
 
-            beer.Name = beerUpdateDto.Name;
-            beer.Alcohol = beerUpdateDto.Alcohol;
-            beer.BrandID = beerUpdateDto.BrandID;
+
+            beer = _mapper.Map<BeerUpdateDto, Beer>(beerUpdateDto, beer);
 
             _beerRepository.Update(beer);
             await _beerRepository.Save();
@@ -88,6 +89,14 @@ namespace Backend2.Services
                 return beerDto;
             }
             return null;
+        }
+
+        public bool Validate(BeerInsertDto beerInsertDto) {
+            return true;
+        }
+
+        public bool Validate(BeerUpdateDto beerUpdateDto) { 
+            return false;
         }
 
     }

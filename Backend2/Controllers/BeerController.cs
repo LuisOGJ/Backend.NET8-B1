@@ -1,5 +1,4 @@
 ﻿using Backend2.DTOs;
-using Backend2.Models;
 using Backend2.Services;
 using FluentValidation;
 using Microsoft.AspNetCore.Http;
@@ -57,6 +56,10 @@ namespace Backend2.Controllers
                 return BadRequest(validationResult.Errors);
             }
 
+            if (!_beerService.Validate(beerInsertDto)) {
+                return BadRequest(_beerService.Errors);
+            }
+
             var beerDto = await _beerService.Add(beerInsertDto);
 
             
@@ -75,6 +78,10 @@ namespace Backend2.Controllers
 
             if (!validatioResult.IsValid) {
                 return BadRequest(validatioResult.Errors);
+            }
+
+            if (!_beerService.Validate(beerUpdateDto)) {
+                return BadRequest(_beerService.Errors);
             }
 
             var beerDto = await _beerService.Update(id, beerUpdateDto);
